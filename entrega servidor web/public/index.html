@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servidor Web - Paginación y Ordenamiento</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .info-section {
+            background: #f0f4ff;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 30px;
+            border-radius: 5px;
+            line-height: 1.6;
+        }
+
+        .info-section h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .info-section p {
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        .links-section {
+            margin-bottom: 30px;
+        }
+
+        .links-section h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .link-group {
+            margin-bottom: 25px;
+        }
+
+        .link-group h3 {
+            color: #555;
+            font-size: 1em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .link-group h3::before {
+            content: "→";
+            margin-right: 8px;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .link-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn {
+            display: block;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #0066cc 0%, #004999 100%);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 5px 15px rgba(0, 102, 204, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #0066cc 0%, #004999 100%);
+        }
+
+        .btn-success:hover {
+            box-shadow: 0 5px 15px rgba(0, 102, 204, 0.4);
+        }
+
+        .footer {
+            text-align: center;
+            color: #999;
+            font-size: 0.9em;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .feature-list {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .feature-list ul {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .feature-list li {
+            padding: 8px 0;
+            color: #555;
+            border-bottom: 1px solid #eee;
+        }
+
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-list li::before {
+            content: "✓ ";
+            color: #4facfe;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .btn {
+                padding: 10px 15px;
+                font-size: 0.95em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 20px;">
+            <img src="/images/logo.gif" alt="Logo del servidor" style="width: 100px; height: auto;">
+        </div>
+        <h1>Servidor Web</h1>
+        <p class="subtitle">Sistema de Paginación y Ordenamiento</p>
+        
+        <div style="text-align: center; margin: 20px 0;">
+            <img src="/images/banner.jpg" alt="Banner principal" style="width: 100%; max-width: 500px; height: auto; border-radius: 5px;">
+        </div>
+
+        <div class="links-section">
+            <h2>Enlaces Disponibles</h2>
+
+            <div class="link-group">
+                <h3>Visualización de Cursos</h3>
+                <div class="link-buttons">
+                    <a href="/courses.html?page=0&size=3" class="btn">Ver Todos los Cursos (Paginado)</a>
+                    <a href="/courses.html?page=0&size=3&sort=name&direction=asc" class="btn btn-secondary">Cursos Ordenados por Nombre</a>
+                    <a href="/courses.html?page=0&size=3&sort=credits&direction=desc" class="btn btn-secondary">Cursos por Créditos (Mayor a Menor)</a>
+                </div>
+            </div>
+
+            <div class="link-group">
+                <h3>Navegación</h3>
+                <div class="link-buttons">
+                    <a href="/courses.html" class="btn btn-success">Ir a Página de Cursos</a>
+                    <a href="/error-404" class="btn">Prueba Error 404</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Servidor ejecutándose en: <strong>http://localhost:8080</strong></p>
+            <p style="margin-top: 10px; font-size: 0.85em;">Compunet II - Semestre VI</p>
+        </div>
+    </div>
+</body>
+</html>
